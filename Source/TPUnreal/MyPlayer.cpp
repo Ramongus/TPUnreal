@@ -31,14 +31,22 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+	PlayerInputComponent->BindAxis("MoveForward", this, &AMyPlayer::MoveForward);
+	PlayerInputComponent->BindAxis("MoveRight", this, &AMyPlayer::MoveRight);
 }
 
 void AMyPlayer::MoveForward(float value) {
-	FVector forward = GetActorForwardVector().GetSafeNormal();
+
+	if (value != 0) {
+		FVector forward = GetActorForwardVector().GetSafeNormal();
+		AddMovementInput(forward, speed * value);
+	}
 }
 
 void AMyPlayer::MoveRight(float value) {
 
+	if (value != 0) {
+		FVector right = GetActorRightVector().GetSafeNormal();
+		AddMovementInput(right, speed * value);
+	}
 }
-
-//Script abandonado porque hereda de Character y tenia que heredear de pawn. DOU!
