@@ -37,16 +37,16 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AMyPlayer::MoveForward(float value) {
 
-	if (value != 0) {
+	//if (value != 0) {
 		FVector forward = GetActorForwardVector().GetSafeNormal();
 		AddMovementInput(forward, speed * value);
-	}
+	//}
 }
 
 void AMyPlayer::MoveRight(float value) {
 
-	if (value != 0) {
+	//if (value != 0) {
 		FVector right = GetActorRightVector().GetSafeNormal();
 		AddMovementInput(right, speed * value);
-	}
+	//}
 }
