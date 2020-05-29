@@ -42,11 +42,11 @@ void AMyEnemyActor::CheckIdle()
 	{
 		canMove = true;
 	}
+	
 }
 
 void AMyEnemyActor::MoveForward()
 {
-	
 
 	FVector dirVector = player->GetActorLocation() - GetActorLocation();
 	dirVector = FVector(dirVector.X, dirVector.Y, 0);
