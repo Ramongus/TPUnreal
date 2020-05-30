@@ -33,20 +33,28 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMyPlayer::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMyPlayer::MoveRight);
+	PlayerInputComponent->BindAxis("Turn", this, &AMyPlayer::Turn);
+	PlayerInputComponent->BindAxis("LookUp", this, &AMyPlayer::LookUp);
 }
 
 void AMyPlayer::MoveForward(float value) {
 
-	//if (value != 0) {
-		FVector forward = GetActorForwardVector().GetSafeNormal();
-		AddMovementInput(forward, speed * value);
-	//}
+	FVector forward = GetActorForwardVector().GetSafeNormal();
+	AddMovementInput(forward, speed * value);
 }
 
 void AMyPlayer::MoveRight(float value) {
 
-	//if (value != 0) {
-		FVector right = GetActorRightVector().GetSafeNormal();
-		AddMovementInput(right, speed * value);
-	//}
+	FVector right = GetActorRightVector().GetSafeNormal();
+	AddMovementInput(right, speed * value);
+}
+
+void AMyPlayer::Turn(float value) {
+
+	AddControllerYawInput(value * rotationSpeed);
+}
+
+void AMyPlayer::LookUp(float value) {
+
+	AddControllerPitchInput(value * lookUpSpeed);
 }

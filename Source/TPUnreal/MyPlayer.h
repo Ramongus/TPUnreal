@@ -17,6 +17,10 @@ public:
 
 	UPROPERTY(EditDefaultsOnly)
 		float speed = 10.0f;
+	UPROPERTY(EditDefaultsOnly)
+		float rotationSpeed = 2.0f;
+	UPROPERTY(EditDefaultsOnly)
+		float lookUpSpeed = 2.0f;
 
 protected:
 	// Called when the game starts or when spawned
@@ -31,4 +35,6 @@ public:
 
 	void MoveForward(float value);
 	void MoveRight(float value);
+	void Turn(float value);
+	void LookUp(float value);
 };
