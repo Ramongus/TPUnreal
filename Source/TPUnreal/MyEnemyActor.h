@@ -2,6 +2,9 @@
 
 #pragma once
 
+#include "Engine.h"
+#include "Engine/World.h"
+#include "BulletProjectile.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "MyEnemyActor.generated.h"
@@ -25,7 +28,15 @@ public:
 		float distanceToStop;
 
 	UPROPERTY(EditAnywhere)
+		float timeBetweenShoot;
+
+	UPROPERTY(EditAnywhere)
 		bool canMove;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<class ABulletProjectile> bulletPrefab;
+
+	FTimerHandle myTimer;
 
 protected:
 	// Called when the game starts or when spawned
@@ -38,5 +49,8 @@ public:
 	void MoveForward();
 
 	void CheckIdle();
+
+	UFUNCTION()
+		void Shoot();
 
 };

@@ -2,6 +2,7 @@
 
 
 #include "MyEnemyActor.h"
+
 #include "Kismet/KismetMathLibrary.h"
 
 // Sets default values
@@ -15,7 +16,7 @@ AMyEnemyActor::AMyEnemyActor()
 void AMyEnemyActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	GetWorld()->GetTimerManager().SetTimer(myTimer, this, &AMyEnemyActor::Shoot, timeBetweenShoot, true, 0.f);
 }
 
 // Called every frame
@@ -27,7 +28,14 @@ void AMyEnemyActor::Tick(float DeltaTime)
 	{
 		AMyEnemyActor::MoveForward();
 	}
+	
 	AMyEnemyActor::CheckIdle();
+
+	FRotator lookRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), player->GetActorLocation());
+
+	lookRotation = FRotator(0, lookRotation.Yaw, 0);
+
+	SetActorRotation(lookRotation, ETeleportType::None);
 	
 }
 
@@ -52,10 +60,13 @@ void AMyEnemyActor::MoveForward()
 	dirVector = FVector(dirVector.X, dirVector.Y, 0);
 	SetActorLocation(GetActorLocation() + dirVector.GetSafeNormal() * speed);
 
-	FRotator lookRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), player->GetActorLocation());
-	
-	lookRotation = FRotator(0, lookRotation.Yaw, 0);
+}
 
-	SetActorRotation(lookRotation, ETeleportType::None);
+void AMyEnemyActor::Shoot()
+{
+	if (bulletPrefab && canMove == false)
+	{
+		GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, GetActorLocation(), GetActorRotation());
+	}
 }
 

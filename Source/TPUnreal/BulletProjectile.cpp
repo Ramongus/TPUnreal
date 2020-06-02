@@ -14,7 +14,7 @@ ABulletProjectile::ABulletProjectile()
 void ABulletProjectile::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	GetWorld()->GetTimerManager().SetTimer(myTimer, this, &ABulletProjectile::DestroyThisBullet, timeToDie, true, timeToDie);
 }
 
 // Called every frame
@@ -22,5 +22,10 @@ void ABulletProjectile::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 	SetActorLocation(GetActorLocation() + GetActorForwardVector() * speed * DeltaTime);
+}
+
+void ABulletProjectile::DestroyThisBullet()
+{
+	Destroy();
 }
 
