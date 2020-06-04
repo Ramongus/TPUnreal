@@ -5,6 +5,7 @@
 #include "Engine.h"
 #include "Engine/World.h"
 #include "BulletProjectile.h"
+#include "Enemy_AnimIns.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "MyEnemyActor.generated.h"
@@ -22,6 +23,9 @@ public:
 		AActor* player;
 
 	UPROPERTY(EditAnywhere)
+		UChildActorComponent* gunPointPos;
+
+	UPROPERTY(EditAnywhere)
 		float speed;
 
 	UPROPERTY(EditAnywhere)
@@ -37,6 +41,9 @@ public:
 		TSubclassOf<class ABulletProjectile> bulletPrefab;
 
 	FTimerHandle myTimer;
+
+	UPROPERTY()
+		UEnemy_AnimIns* animator;
 
 protected:
 	// Called when the game starts or when spawned

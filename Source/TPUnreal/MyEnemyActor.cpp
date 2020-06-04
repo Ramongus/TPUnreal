@@ -17,6 +17,16 @@ void AMyEnemyActor::BeginPlay()
 {
 	Super::BeginPlay();
 	GetWorld()->GetTimerManager().SetTimer(myTimer, this, &AMyEnemyActor::Shoot, timeBetweenShoot, true, 0.f);
+
+	auto mesh = FindComponentByClass<USkeletalMeshComponent>();
+	if (mesh)
+	{
+		animator = Cast<UEnemy_AnimIns>(mesh->GetAnimInstance());
+	}
+
+	
+
+	
 }
 
 // Called every frame
@@ -28,6 +38,7 @@ void AMyEnemyActor::Tick(float DeltaTime)
 	{
 		AMyEnemyActor::MoveForward();
 	}
+	
 	
 	AMyEnemyActor::CheckIdle();
 
@@ -45,6 +56,7 @@ void AMyEnemyActor::CheckIdle()
 	if (dis <= distanceToStop)
 	{
 		canMove = false;
+		animator->ChangeIsWalkingValue(false);
 	}
 	else
 	{
@@ -59,14 +71,14 @@ void AMyEnemyActor::MoveForward()
 	FVector dirVector = player->GetActorLocation() - GetActorLocation();
 	dirVector = FVector(dirVector.X, dirVector.Y, 0);
 	SetActorLocation(GetActorLocation() + dirVector.GetSafeNormal() * speed);
-
+	animator->ChangeIsWalkingValue(true);
 }
 
 void AMyEnemyActor::Shoot()
 {
 	if (bulletPrefab && canMove == false)
 	{
-		GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, GetActorLocation(), GetActorRotation());
+		GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab,GetActorLocation() , GetActorRotation());
 	}
 }
 
