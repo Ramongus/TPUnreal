@@ -19,8 +19,14 @@ public:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadWrite)
 	bool isWalking;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		bool isShooting;
+
 
 public:
 	UFUNCTION(BlueprintCallable)
 		void ChangeIsWalkingValue(bool value);
+
+	UFUNCTION(BlueprintCallable)
+		void ShootNotify(bool value);
 };

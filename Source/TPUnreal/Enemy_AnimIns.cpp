@@ -7,3 +7,8 @@ void UEnemy_AnimIns::ChangeIsWalkingValue(bool value)
 {
 	isWalking = value;
 }
+
+void UEnemy_AnimIns::ShootNotify(bool value)
+{
+	isShooting = value;
+}

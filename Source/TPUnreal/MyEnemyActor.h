@@ -43,7 +43,7 @@ public:
 	FTimerHandle myTimer;
 
 	UPROPERTY()
-		UEnemy_AnimIns* animator;
+	UEnemy_AnimIns* animatorEnemy;
 
 protected:
 	// Called when the game starts or when spawned

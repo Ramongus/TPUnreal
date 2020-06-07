@@ -21,7 +21,7 @@ void AMyEnemyActor::BeginPlay()
 	auto mesh = FindComponentByClass<USkeletalMeshComponent>();
 	if (mesh)
 	{
-		animator = Cast<UEnemy_AnimIns>(mesh->GetAnimInstance());
+		animatorEnemy = Cast<UEnemy_AnimIns>(mesh->GetAnimInstance());
 	}
 
 	
@@ -56,7 +56,7 @@ void AMyEnemyActor::CheckIdle()
 	if (dis <= distanceToStop)
 	{
 		canMove = false;
-		animator->ChangeIsWalkingValue(false);
+		animatorEnemy->ChangeIsWalkingValue(false);
 	}
 	else
 	{
@@ -71,11 +71,12 @@ void AMyEnemyActor::MoveForward()
 	FVector dirVector = player->GetActorLocation() - GetActorLocation();
 	dirVector = FVector(dirVector.X, dirVector.Y, 0);
 	SetActorLocation(GetActorLocation() + dirVector.GetSafeNormal() * speed);
-	animator->ChangeIsWalkingValue(true);
+	animatorEnemy->ChangeIsWalkingValue(true);
 }
 
 void AMyEnemyActor::Shoot()
 {
+	animatorEnemy->ShootNotify(true);
 	if (bulletPrefab && canMove == false)
 	{
 		GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab,GetActorLocation() , GetActorRotation());
