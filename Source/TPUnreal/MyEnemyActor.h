@@ -7,6 +7,7 @@
 #include "BulletProjectile.h"
 #include "Enemy_AnimIns.h"
 #include "CoreMinimal.h"
+#include "MyPlayer.h"
 #include "GameFramework/Actor.h"
 #include "MyEnemyActor.generated.h"
 
@@ -18,9 +19,6 @@ class TPUNREAL_API AMyEnemyActor : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AMyEnemyActor();
-
-	UPROPERTY(EditAnywhere)
-		AActor* player;
 
 	UPROPERTY(EditAnywhere)
 		UChildActorComponent* gunPointPos;
@@ -44,6 +42,8 @@ public:
 
 	UPROPERTY()
 	UEnemy_AnimIns* animatorEnemy;
+
+	AActor* theplayer;
 
 protected:
 	// Called when the game starts or when spawned

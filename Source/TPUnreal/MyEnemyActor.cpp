@@ -24,9 +24,21 @@ void AMyEnemyActor::BeginPlay()
 		animatorEnemy = Cast<UEnemy_AnimIns>(mesh->GetAnimInstance());
 	}
 
+	TArray<AActor*> pawnActors;
+	UGameplayStatics::GetAllActorsOfClass(this, AMyPlayer::StaticClass(), pawnActors);
+
+	if (pawnActors[0] != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("el player es %s"), *pawnActors[0]->GetName());
+	}
 	
 
 	
+	theplayer = pawnActors[0];
+	if (theplayer == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("NO ENCUENTRA AL FPS"));
+	}
 }
 
 // Called every frame
@@ -42,7 +54,7 @@ void AMyEnemyActor::Tick(float DeltaTime)
 	
 	AMyEnemyActor::CheckIdle();
 
-	FRotator lookRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), player->GetActorLocation());
+	FRotator lookRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), theplayer->GetActorLocation());
 
 	lookRotation = FRotator(0, lookRotation.Yaw, 0);
 
@@ -52,7 +64,7 @@ void AMyEnemyActor::Tick(float DeltaTime)
 
 void AMyEnemyActor::CheckIdle()
 {
-	float dis = FMath::Abs(FVector::Dist(player->GetActorLocation(), GetActorLocation()));
+	float dis = FMath::Abs(FVector::Dist(theplayer->GetActorLocation(), GetActorLocation()));
 	if (dis <= distanceToStop)
 	{
 		canMove = false;
@@ -68,7 +80,7 @@ void AMyEnemyActor::CheckIdle()
 void AMyEnemyActor::MoveForward()
 {
 
-	FVector dirVector = player->GetActorLocation() - GetActorLocation();
+	FVector dirVector = theplayer->GetActorLocation() - GetActorLocation();
 	dirVector = FVector(dirVector.X, dirVector.Y, 0);
 	SetActorLocation(GetActorLocation() + dirVector.GetSafeNormal() * speed);
 	animatorEnemy->ChangeIsWalkingValue(true);
@@ -76,10 +88,12 @@ void AMyEnemyActor::MoveForward()
 
 void AMyEnemyActor::Shoot()
 {
-	animatorEnemy->ShootNotify(true);
+	animatorEnemy->ShootNotify(false);
+	
 	if (bulletPrefab && canMove == false)
 	{
 		GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab,GetActorLocation() , GetActorRotation());
 	}
+	animatorEnemy->ShootNotify(true);
 }
 
