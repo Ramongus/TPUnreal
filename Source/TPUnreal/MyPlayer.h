@@ -3,7 +3,11 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine.h"
+#include "Engine/World.h"
 #include "GameFramework/Character.h"
+#include "BulletProjectile.h"
+#include "GameFramework/Actor.h"
 #include "MyPlayer.generated.h"
 
 UCLASS()
@@ -21,6 +25,8 @@ public:
 		float rotationSpeed = 2.0f;
 	UPROPERTY(EditDefaultsOnly)
 		float lookUpSpeed = 2.0f;
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<class ABulletProjectile> bulletPrefab;
 
 protected:
 	// Called when the game starts or when spawned
@@ -37,4 +43,5 @@ public:
 	void MoveRight(float value);
 	void Turn(float value);
 	void LookUp(float value);
+	void Shoot();
 };

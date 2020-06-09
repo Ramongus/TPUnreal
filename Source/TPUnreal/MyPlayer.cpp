@@ -35,6 +35,7 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMyPlayer::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &AMyPlayer::Turn);
 	PlayerInputComponent->BindAxis("LookUp", this, &AMyPlayer::LookUp);
+	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &AMyPlayer::Shoot);
 }
 
 void AMyPlayer::MoveForward(float value) {
@@ -57,4 +58,9 @@ void AMyPlayer::Turn(float value) {
 void AMyPlayer::LookUp(float value) {
 
 	AddControllerPitchInput(value * lookUpSpeed);
+}
+
+void AMyPlayer::Shoot() {
+
+	GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, GetActorLocation(), GetActorRotation());
 }
