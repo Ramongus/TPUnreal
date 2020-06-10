@@ -49,4 +49,5 @@ public:
 	void Turn(float value);
 	void LookUp(float value);
 	void Shoot();
+	void JumpAction();
 };

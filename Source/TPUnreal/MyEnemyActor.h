@@ -15,8 +15,8 @@ UCLASS()
 class TPUNREAL_API AMyEnemyActor : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+public:
 	// Sets default values for this actor's properties
 	AMyEnemyActor();
 
@@ -36,20 +36,46 @@ public:
 		bool canMove;
 
 	UPROPERTY(EditAnywhere)
+		bool canShoot;
+
+	UPROPERTY(EditAnywhere)
+		bool canRotate;
+
+	UPROPERTY(EditAnywhere)
+		int totalLife;
+
+	UPROPERTY(EditAnywhere)
 		TSubclassOf<class ABulletProjectile> bulletPrefab;
 
 	FTimerHandle myTimer;
 
 	UPROPERTY()
-	UEnemy_AnimIns* animatorEnemy;
+		UEnemy_AnimIns* animatorEnemy;
 
 	AActor* theplayer;
+
+
+	bool died;
+	int currentLife;
+
+	UPROPERTY()
+		UAudioComponent* audioComp;
+
+	UPROPERTY(EditAnywhere)
+		USoundCue* shootSound;
+
+	UPROPERTY(EditAnywhere)
+		USoundCue* hitSound;
+
+	UPROPERTY(EditAnywhere)
+		USoundCue* deathSound;
+
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -58,6 +84,12 @@ public:
 	void CheckIdle();
 
 	UFUNCTION()
+		void TakeDamage(int damage);
+
+	UFUNCTION()
 		void Shoot();
+
+	UFUNCTION()
+		void DieAction();
 
 };

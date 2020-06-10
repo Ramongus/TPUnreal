@@ -5,6 +5,8 @@
 #include "Engine.h"
 #include "Engine/World.h"
 #include "CoreMinimal.h"
+#include "MyPlayer.h"
+#include "MyEnemyActor.h"
 #include "GameFramework/Actor.h"
 #include "Components/SphereComponent.h"
 #include "BulletProjectile.generated.h"
@@ -24,6 +26,9 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		float timeToDie;
+
+	UPROPERTY(EditAnywhere)
+		int  damage;
 
 	UPROPERTY(EditAnywhere)
 		FComponentReference reference;

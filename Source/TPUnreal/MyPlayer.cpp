@@ -38,6 +38,7 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	PlayerInputComponent->BindAxis("Turn", this, &AMyPlayer::Turn);
 	PlayerInputComponent->BindAxis("LookUp", this, &AMyPlayer::LookUp);
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &AMyPlayer::Shoot);
+	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMyPlayer::JumpAction);
 }
 
 void AMyPlayer::MoveForward(float value) {
@@ -64,6 +65,11 @@ void AMyPlayer::LookUp(float value) {
 
 void AMyPlayer::Shoot() {
 
-	UE_LOG(LogTemp, Warning, TEXT("ALOJOMORA"));
-	GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, bulletSpawnPoint->GetComponentLocation(), bulletSpawnPoint->GetComponentRotation());
+	GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, bulletSpawnPoint->GetComponentLocation(), GetControlRotation());
+
+}
+
+void AMyPlayer::JumpAction()
+{
+	Jump();
 }

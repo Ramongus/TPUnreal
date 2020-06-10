@@ -22,6 +22,8 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		bool isShooting;
 
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		bool died;
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -29,4 +31,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void ShootNotify(bool value);
+
+	UFUNCTION(BlueprintCallable)
+		void DieNotify();
 };

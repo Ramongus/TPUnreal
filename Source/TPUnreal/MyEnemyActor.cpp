@@ -8,7 +8,7 @@
 // Sets default values
 AMyEnemyActor::AMyEnemyActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 }
 
@@ -27,39 +27,44 @@ void AMyEnemyActor::BeginPlay()
 	TArray<AActor*> pawnActors;
 	UGameplayStatics::GetAllActorsOfClass(this, AMyPlayer::StaticClass(), pawnActors);
 
-	if (pawnActors[0] != nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("el player es %s"), *pawnActors[0]->GetName());
-	}
-	
 
-	
 	theplayer = pawnActors[0];
-	if (theplayer == nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("NO ENCUENTRA AL FPS"));
-	}
+
+
+	currentLife = totalLife;
+
+	canRotate = true;
+	canMove = true;
+	canShoot = true;
+	died = false;
+
+	audioComp = FindComponentByClass<UAudioComponent>();
 }
 
 // Called every frame
 void AMyEnemyActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
+
 	if (canMove == true)
 	{
 		AMyEnemyActor::MoveForward();
 	}
-	
-	
+
+	if (currentLife <= 0 && !died)
+	{
+		DieAction();
+	}
+
 	AMyEnemyActor::CheckIdle();
 
 	FRotator lookRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), theplayer->GetActorLocation());
 
 	lookRotation = FRotator(0, lookRotation.Yaw, 0);
 
-	SetActorRotation(lookRotation, ETeleportType::None);
-	
+	if (canRotate)
+		SetActorRotation(lookRotation, ETeleportType::None);
+
 }
 
 void AMyEnemyActor::CheckIdle()
@@ -74,12 +79,12 @@ void AMyEnemyActor::CheckIdle()
 	{
 		canMove = true;
 	}
-	
+
 }
 
 void AMyEnemyActor::MoveForward()
 {
-
+	animatorEnemy->ShootNotify(false);
 	FVector dirVector = theplayer->GetActorLocation() - GetActorLocation();
 	dirVector = FVector(dirVector.X, dirVector.Y, 0);
 	SetActorLocation(GetActorLocation() + dirVector.GetSafeNormal() * speed);
@@ -87,13 +92,41 @@ void AMyEnemyActor::MoveForward()
 }
 
 void AMyEnemyActor::Shoot()
-{
-	animatorEnemy->ShootNotify(false);
-	
-	if (bulletPrefab && canMove == false)
+{	
+	if (canShoot)
 	{
-		GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab,GetActorLocation() , GetActorRotation());
+		animatorEnemy->ShootNotify(false);
+
+		if (audioComp)
+		{
+			audioComp->Stop();
+			if (shootSound)
+			{
+				audioComp->SetSound(shootSound);
+				audioComp->Play();
+			}
+		}
+		
+		if (bulletPrefab && canMove == false)
+		{
+			FVector spawnPos = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 70);
+			GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, spawnPos + (GetActorLocation().ForwardVector*90), GetActorRotation());
+		}
+		animatorEnemy->ShootNotify(true);
 	}
-	animatorEnemy->ShootNotify(true);
 }
 
+void AMyEnemyActor::TakeDamage(int damage)
+{
+	currentLife -= damage;
+}
+
+void AMyEnemyActor::DieAction()
+{
+	died = true;
+	currentLife = 0;
+	canMove = false;
+	canShoot = false;
+	canRotate = false;
+	animatorEnemy->DieNotify();
+}

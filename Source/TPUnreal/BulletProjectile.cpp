@@ -35,5 +35,20 @@ void ABulletProjectile::DestroyThisBullet()
 
 void ABulletProjectile::OverlapDemo(UPrimitiveComponent* primComp, AActor* overlapedActor, UPrimitiveComponent* otherOverlapedComponent, int32 overInt, bool overBool, const FHitResult& overHit){
 
-	UE_LOG(LogTemp, Warning, TEXT("BULLET COLLIDE WITH SOMETHING"));
+
+	AMyPlayer* playerCollider = Cast<AMyPlayer>(overlapedActor);
+	AMyEnemyActor* enemyCollider = Cast<AMyEnemyActor>(overlapedActor);
+
+	if (playerCollider != nullptr)
+	{
+		//UE_LOG(LogTemp, Warning, TEXT("choco con player"));
+	}
+
+	if (enemyCollider != nullptr)
+	{
+		enemyCollider->TakeDamage(damage);
+		UE_LOG(LogTemp, Warning, TEXT("choco con enemigo"));
+	}
+	
+	DestroyThisBullet();
 }
