@@ -15,6 +15,10 @@ void ABulletProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 	GetWorld()->GetTimerManager().SetTimer(myTimer, this, &ABulletProjectile::DestroyThisBullet, timeToDie, true, timeToDie);
+
+	sphereCol = Cast<USphereComponent>(reference.GetComponent(this));
+
+	sphereCol->OnComponentBeginOverlap.AddDynamic(this, &ABulletProjectile::OverlapDemo);
 }
 
 // Called every frame
@@ -29,3 +33,7 @@ void ABulletProjectile::DestroyThisBullet()
 	Destroy();
 }
 
+void ABulletProjectile::OverlapDemo(UPrimitiveComponent* primComp, AActor* overlapedActor, UPrimitiveComponent* otherOverlapedComponent, int32 overInt, bool overBool, const FHitResult& overHit){
+
+	this->DestroyThisBullet();
+}

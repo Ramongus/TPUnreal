@@ -6,6 +6,7 @@
 #include "Engine/World.h"
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Components/SphereComponent.h"
 #include "BulletProjectile.generated.h"
 
 UCLASS()
@@ -24,6 +25,12 @@ public:
 	UPROPERTY(EditAnywhere)
 		float timeToDie;
 
+	UPROPERTY(EditAnywhere)
+		FComponentReference reference;
+
+	UPROPERTY()
+		USphereComponent* sphereCol;
+
 	FTimerHandle myTimer;
 
 protected:
@@ -36,4 +43,7 @@ public:
 
 	UFUNCTION()
 		void DestroyThisBullet();
+
+	UFUNCTION()
+		void OverlapDemo(UPrimitiveComponent* primComp, AActor* overlapedActor, UPrimitiveComponent* otherOverlapedComponent, int32 overInt, bool overBool, const FHitResult& overHit);
 };
