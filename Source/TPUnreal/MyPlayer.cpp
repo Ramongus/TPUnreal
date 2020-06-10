@@ -17,6 +17,8 @@ void AMyPlayer::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	bulletSpawnPoint = Cast<USceneComponent>(refToSpawnBulletPoint.GetComponent(this));
+
 }
 
 // Called every frame
@@ -62,5 +64,6 @@ void AMyPlayer::LookUp(float value) {
 
 void AMyPlayer::Shoot() {
 
-	GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, GetActorLocation(), GetActorRotation());
+	UE_LOG(LogTemp, Warning, TEXT("ALOJOMORA"));
+	GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, bulletSpawnPoint->GetComponentLocation(), bulletSpawnPoint->GetComponentRotation());
 }

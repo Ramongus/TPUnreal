@@ -35,5 +35,5 @@ void ABulletProjectile::DestroyThisBullet()
 
 void ABulletProjectile::OverlapDemo(UPrimitiveComponent* primComp, AActor* overlapedActor, UPrimitiveComponent* otherOverlapedComponent, int32 overInt, bool overBool, const FHitResult& overHit){
 
-	this->DestroyThisBullet();
+	UE_LOG(LogTemp, Warning, TEXT("BULLET COLLIDE WITH SOMETHING"));
 }

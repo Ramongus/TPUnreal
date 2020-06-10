@@ -8,6 +8,7 @@
 #include "GameFramework/Character.h"
 #include "BulletProjectile.h"
 #include "GameFramework/Actor.h"
+#include "Components/SceneComponent.h"
 #include "MyPlayer.generated.h"
 
 UCLASS()
@@ -27,6 +28,10 @@ public:
 		float lookUpSpeed = 2.0f;
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class ABulletProjectile> bulletPrefab;
+	UPROPERTY(EditAnywhere)
+		FComponentReference refToSpawnBulletPoint;
+
+	USceneComponent* bulletSpawnPoint;
 
 protected:
 	// Called when the game starts or when spawned
