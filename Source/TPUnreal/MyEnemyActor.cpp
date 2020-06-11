@@ -27,8 +27,8 @@ void AMyEnemyActor::BeginPlay()
 	TArray<AActor*> pawnActors;
 	UGameplayStatics::GetAllActorsOfClass(this, AMyPlayer::StaticClass(), pawnActors);
 
-
-	theplayer = pawnActors[0];
+	if (pawnActors[0] != nullptr)
+		theplayer = pawnActors[0];
 
 
 	currentLife = totalLife;
@@ -39,12 +39,45 @@ void AMyEnemyActor::BeginPlay()
 	died = false;
 
 	audioComp = FindComponentByClass<UAudioComponent>();
+
+	
+}
+
+void AMyEnemyActor::SetLifeBarWidget(UWidgetComponent* widget)
+{
+	UE_LOG(LogTemp, Warning, TEXT("no tengo widget %s"), widget->GetWidgetClass());
+	myUserWidget = Cast<UEnemyUserWidget>(widget->GetWidgetClass());
+	if (myUserWidget == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("no tengo widget"));
+	}
 }
 
 // Called every frame
 void AMyEnemyActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (theplayer == nullptr)
+	{
+		TArray<AActor*> pawnActors;
+		UGameplayStatics::GetAllActorsOfClass(this, AMyPlayer::StaticClass(), pawnActors);
+
+		if (pawnActors[0] != nullptr)
+			theplayer = pawnActors[0];
+		return;
+	}
+
+
+	if (died == true)
+	{
+		timeToDie -= DeltaTime;
+		if (timeToDie <= 0)
+		{
+			DestroyThisObject();
+		}
+		return;
+	}
 
 	if (canMove == true)
 	{
@@ -77,13 +110,22 @@ void AMyEnemyActor::CheckIdle()
 	}
 	else
 	{
-		canMove = true;
+		if(!died) canMove = true;
 	}
 
 }
 
+void AMyEnemyActor::DestroyThisObject()
+{
+	Destroy();
+}
+
 void AMyEnemyActor::MoveForward()
 {
+	if (audioComp)
+	{
+		audioComp->Stop();
+	}
 	animatorEnemy->ShootNotify(false);
 	FVector dirVector = theplayer->GetActorLocation() - GetActorLocation();
 	dirVector = FVector(dirVector.X, dirVector.Y, 0);
@@ -92,25 +134,26 @@ void AMyEnemyActor::MoveForward()
 }
 
 void AMyEnemyActor::Shoot()
-{	
+{
 	if (canShoot)
 	{
 		animatorEnemy->ShootNotify(false);
 
-		if (audioComp)
-		{
-			audioComp->Stop();
-			if (shootSound)
-			{
-				audioComp->SetSound(shootSound);
-				audioComp->Play();
-			}
-		}
 		
+
 		if (bulletPrefab && canMove == false)
 		{
+			if (audioComp)
+			{
+				audioComp->Stop();
+				if (shootSound)
+				{
+					audioComp->SetSound(shootSound);
+					audioComp->Play();
+				}
+			}
 			FVector spawnPos = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 70);
-			GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, spawnPos + (GetActorLocation().ForwardVector*90), GetActorRotation());
+			GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, spawnPos + (GetActorForwardVector() * 90), GetActorRotation());
 		}
 		animatorEnemy->ShootNotify(true);
 	}
@@ -119,6 +162,10 @@ void AMyEnemyActor::Shoot()
 void AMyEnemyActor::TakeDamage(int damage)
 {
 	currentLife -= damage;
+	if (myUserWidget)
+	{
+		myUserWidget->UpdateLifeBar(currentLife, totalLife);
+	}
 }
 
 void AMyEnemyActor::DieAction()

@@ -2,12 +2,13 @@
 
 
 #include "MyPlayer.h"
+#include "PlayersHUD.h"
 #include "Components/InputComponent.h"
 
 // Sets default values
 AMyPlayer::AMyPlayer()
 {
- 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 }
@@ -16,16 +17,22 @@ AMyPlayer::AMyPlayer()
 void AMyPlayer::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	bulletSpawnPoint = Cast<USceneComponent>(refToSpawnBulletPoint.GetComponent(this));
 
+	bulletSpawnPoint = Cast<USceneComponent>(refToSpawnBulletPoint.GetComponent(this));
+	currentLife = totalLife;
+	died = false;
+
+	//myHud = Cast<APlayersHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
 }
 
 // Called every frame
 void AMyPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	if (currentLife <= 0 && !died)
+	{
+		DieAction();
+	}
 }
 
 // Called to bind functionality to input
@@ -72,4 +79,20 @@ void AMyPlayer::Shoot() {
 void AMyPlayer::JumpAction()
 {
 	Jump();
+}
+
+void AMyPlayer::TakeDamage(int damage)
+{
+	if (died) return;
+	currentLife -= damage;
+
+	APlayersHUD* hud = Cast<APlayersHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+	if (hud)	hud->UpdateLifeBar(currentLife , totalLife);
+	else UE_LOG(LogTemp, Warning, TEXT("no hay hud"));
+}
+
+void AMyPlayer::DieAction()
+{
+	died = true;
+	GetWorld()->SeamlessTravel("DemoLevel");
 }

@@ -8,6 +8,8 @@
 #include "Enemy_AnimIns.h"
 #include "CoreMinimal.h"
 #include "MyPlayer.h"
+#include "Components/WidgetComponent.h"
+#include "EnemyUserWidget.h"
 #include "GameFramework/Actor.h"
 #include "MyEnemyActor.generated.h"
 
@@ -33,6 +35,9 @@ public:
 		float timeBetweenShoot;
 
 	UPROPERTY(EditAnywhere)
+		float timeToDie;
+
+	UPROPERTY(EditAnywhere)
 		bool canMove;
 
 	UPROPERTY(EditAnywhere)
@@ -42,7 +47,10 @@ public:
 		bool canRotate;
 
 	UPROPERTY(EditAnywhere)
-		int totalLife;
+		float totalLife;
+
+	UPROPERTY(EditAnywhere,BlueprintReadWrite)
+		UEnemyUserWidget* myUserWidget;
 
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class ABulletProjectile> bulletPrefab;
@@ -56,7 +64,7 @@ public:
 
 
 	bool died;
-	int currentLife;
+	float currentLife;
 
 	UPROPERTY()
 		UAudioComponent* audioComp;
@@ -91,5 +99,11 @@ public:
 
 	UFUNCTION()
 		void DieAction();
+
+	UFUNCTION()
+		void DestroyThisObject();
+
+	UFUNCTION(BlueprintCallable)
+		void SetLifeBarWidget(UWidgetComponent* widget);
 
 };

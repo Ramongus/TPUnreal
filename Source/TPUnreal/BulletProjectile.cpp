@@ -41,13 +41,14 @@ void ABulletProjectile::OverlapDemo(UPrimitiveComponent* primComp, AActor* overl
 
 	if (playerCollider != nullptr)
 	{
+		playerCollider->TakeDamage(damage);
 		//UE_LOG(LogTemp, Warning, TEXT("choco con player"));
 	}
 
 	if (enemyCollider != nullptr)
 	{
 		enemyCollider->TakeDamage(damage);
-		UE_LOG(LogTemp, Warning, TEXT("choco con enemigo"));
+		//UE_LOG(LogTemp, Warning, TEXT("choco con enemigo"));
 	}
 	
 	DestroyThisBullet();

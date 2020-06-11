@@ -26,6 +26,13 @@ public:
 		float rotationSpeed = 2.0f;
 	UPROPERTY(EditDefaultsOnly)
 		float lookUpSpeed = 2.0f;
+
+	UPROPERTY(EditDefaultsOnly)
+		float totalLife = 5;
+
+	float currentLife = 5;
+	bool died;
+
 	UPROPERTY(EditAnywhere)
 		TSubclassOf<class ABulletProjectile> bulletPrefab;
 	UPROPERTY(EditAnywhere)
@@ -33,11 +40,13 @@ public:
 
 	USceneComponent* bulletSpawnPoint;
 
+	
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
@@ -50,4 +59,8 @@ public:
 	void LookUp(float value);
 	void Shoot();
 	void JumpAction();
+	UFUNCTION()
+		void TakeDamage(int damage);
+	UFUNCTION()
+		void DieAction();
 };
