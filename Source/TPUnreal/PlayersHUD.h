@@ -23,6 +23,7 @@ public:
 	TSubclassOf<UUserWidget> usetWidgetClass;
 
 	void UpdateLifeBar(float lifeAmount , float totalLifeAmount);
+	void UpdateScoreText(int value);
 	
 
 	virtual void DrawHUD();

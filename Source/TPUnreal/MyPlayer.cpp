@@ -73,7 +73,6 @@ void AMyPlayer::LookUp(float value) {
 void AMyPlayer::Shoot() {
 
 	GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, bulletSpawnPoint->GetComponentLocation(), GetControlRotation());
-
 }
 
 void AMyPlayer::JumpAction()

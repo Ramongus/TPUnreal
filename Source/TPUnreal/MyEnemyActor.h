@@ -8,6 +8,7 @@
 #include "Enemy_AnimIns.h"
 #include "CoreMinimal.h"
 #include "MyPlayer.h"
+#include "TPUnrealGameState.h"
 #include "Components/WidgetComponent.h"
 #include "EnemyUserWidget.h"
 #include "GameFramework/Actor.h"
@@ -103,7 +104,5 @@ public:
 	UFUNCTION()
 		void DestroyThisObject();
 
-	UFUNCTION(BlueprintCallable)
-		void SetLifeBarWidget(UWidgetComponent* widget);
-
+	
 };

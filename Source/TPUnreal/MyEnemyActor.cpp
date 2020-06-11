@@ -43,15 +43,6 @@ void AMyEnemyActor::BeginPlay()
 	
 }
 
-void AMyEnemyActor::SetLifeBarWidget(UWidgetComponent* widget)
-{
-	UE_LOG(LogTemp, Warning, TEXT("no tengo widget %s"), widget->GetWidgetClass());
-	myUserWidget = Cast<UEnemyUserWidget>(widget->GetWidgetClass());
-	if (myUserWidget == nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("no tengo widget"));
-	}
-}
 
 // Called every frame
 void AMyEnemyActor::Tick(float DeltaTime)
@@ -84,10 +75,7 @@ void AMyEnemyActor::Tick(float DeltaTime)
 		AMyEnemyActor::MoveForward();
 	}
 
-	if (currentLife <= 0 && !died)
-	{
-		DieAction();
-	}
+	
 
 	AMyEnemyActor::CheckIdle();
 
@@ -166,10 +154,19 @@ void AMyEnemyActor::TakeDamage(int damage)
 	{
 		myUserWidget->UpdateLifeBar(currentLife, totalLife);
 	}
+	if (currentLife <= 0 && !died)
+	{
+		DieAction();
+	}
 }
 
 void AMyEnemyActor::DieAction()
 {
+	ATPUnrealGameState* myState = GetWorld()->GetGameState<ATPUnrealGameState>();
+	if (myState)
+	{
+		myState->SetScore(1);
+	}
 	died = true;
 	currentLife = 0;
 	canMove = false;

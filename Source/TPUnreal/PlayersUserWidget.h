@@ -27,4 +27,5 @@ public:
 	UProgressBar* lifeBar;
 	
 	void UpdateLifeBar(float lifeAmount,float totalLife);
+	void UpdateScoreText(int value);
 };

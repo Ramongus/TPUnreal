@@ -39,3 +39,11 @@ void APlayersHUD::UpdateLifeBar(float lifeAmount, float totalLifeAmount)
 		playersUserWidget->UpdateLifeBar(lifeAmount, totalLifeAmount);
 	}
 }
+
+void APlayersHUD::UpdateScoreText(int value)
+{
+	if (playersUserWidget)
+	{
+		playersUserWidget->UpdateScoreText(value);
+	}
+}

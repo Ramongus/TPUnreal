@@ -20,3 +20,11 @@ void UPlayersUserWidget::UpdateLifeBar(float lifeAmount,float totalLife)
 		lifeBar->SetPercent(lifeAmount/totalLife);
 	}
 }
+
+void UPlayersUserWidget::UpdateScoreText(int value)
+{
+	if (pointsText)
+	{
+		pointsText->SetText(FText::FromString("POINTS: " + FString::FromInt(value)));
+	}
+}

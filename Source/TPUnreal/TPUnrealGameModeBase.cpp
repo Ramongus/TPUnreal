@@ -3,3 +3,8 @@
 
 #include "TPUnrealGameModeBase.h"
 
+bool ATPUnrealGameModeBase::IsRoundFinished() const
+{
+	ATPUnrealGameState* myGameState = GetWorld()->GetGameState<ATPUnrealGameState>();
+	return myGameState->GetScore() >= pointsToFinishRound;
+}
