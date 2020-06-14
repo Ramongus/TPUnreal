@@ -17,9 +17,18 @@ class TPUNREAL_API ATPUnrealGameModeBase : public AGameModeBase
 	GENERATED_BODY()
 public:
 	UPROPERTY(EditDefaultsOnly)
-		float timeToSpawnPlayer;
+		int timeToSpawnPlayer;
+	UPROPERTY(EditDefaultsOnly)
+		int playersLifes;
+	UPROPERTY(EditDefaultsOnly)
+		float timeToSpawnEnemy;
 	UPROPERTY(EditDefaultsOnly)
 		int pointsToFinishRound = 10;
+	UPROPERTY(EditDefaultsOnly)
+		int enemiesToSpawn = 2;
+
+	int enemiesDestroyed = 2;
+	float timerToSpawn = 0;
 
 public:
 	

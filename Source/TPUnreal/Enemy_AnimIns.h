@@ -24,6 +24,8 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
 		bool died;
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite)
+		bool gotHit;
 
 public:
 	UFUNCTION(BlueprintCallable)
@@ -34,4 +36,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 		void DieNotify();
+	UFUNCTION(BlueprintCallable)
+		void HitNotify(bool value);
 };

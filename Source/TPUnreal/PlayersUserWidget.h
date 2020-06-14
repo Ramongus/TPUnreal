@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Engine.h"
+#include "Engine/World.h"
 #include "Blueprint/UserWidget.h"
 #include "Runtime/UMG/Public/UMG.h"
 #include "PlayersUserWidget.generated.h"
@@ -25,7 +27,15 @@ public:
 
 	UPROPERTY(meta = (BindWidget))
 	UProgressBar* lifeBar;
-	
+
+	UPROPERTY(meta = (BindWidget))
+		UTextBlock* mainText;
+
+	UPROPERTY(meta = (BingWidgetAnim))
+		UWidgetAnimation* FadeOutAnim;
+
+
 	void UpdateLifeBar(float lifeAmount,float totalLife);
 	void UpdateScoreText(int value);
+	void UpdateMainText(FString text);
 };

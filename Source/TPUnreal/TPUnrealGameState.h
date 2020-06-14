@@ -21,9 +21,14 @@ protected:
 
 	int score = 0;
 	int currentRound = 1;
+	int currentEnemiesDestroyed;
 
 public:
 	int GetScore() const { return score; }
+	int GetEnemiesDestroyed() const { return currentEnemiesDestroyed; }
 	void SetScore(int value);
+	void AddDestroyedEnemy();
 	void OnRoundFinished();
+	void OnRoundLost();
+	void OnRoundDied();
 };

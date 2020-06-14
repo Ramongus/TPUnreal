@@ -17,3 +17,8 @@ void UEnemy_AnimIns::DieNotify()
 {
 	died = true;
 }
+
+void UEnemy_AnimIns::HitNotify(bool value)
+{
+	gotHit = value;
+}

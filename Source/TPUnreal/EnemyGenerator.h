@@ -19,8 +19,10 @@ public:
 	// Sets default values for this component's properties
 	UEnemyGenerator();
 
+	
 	int enemiesToSpawn = 2;
-
+	int timeToSpawnEnemies = 5;
+	float spawnTimer;
 	UPROPERTY(EditAnywhere)
 	TArray<AActor*> spawnPoints;
 

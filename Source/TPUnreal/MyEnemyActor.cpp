@@ -131,15 +131,7 @@ void AMyEnemyActor::Shoot()
 
 		if (bulletPrefab && canMove == false)
 		{
-			if (audioComp)
-			{
-				audioComp->Stop();
-				if (shootSound)
-				{
-					audioComp->SetSound(shootSound);
-					audioComp->Play();
-				}
-			}
+			PlaySound(shootSound);
 			FVector spawnPos = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 70);
 			GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, spawnPos + (GetActorForwardVector() * 90), GetActorRotation());
 		}
@@ -147,9 +139,19 @@ void AMyEnemyActor::Shoot()
 	}
 }
 
-void AMyEnemyActor::TakeDamage(int damage)
+
+
+void AMyEnemyActor::TakeDamage(int damage,int points)
 {
+	if (died) return;
 	currentLife -= damage;
+	ATPUnrealGameState* myState = GetWorld()->GetGameState<ATPUnrealGameState>();
+	PlaySound(hitSound);
+	animatorEnemy->HitNotify(true);
+	if (myState)
+	{
+		myState->SetScore(points);
+	}
 	if (myUserWidget)
 	{
 		myUserWidget->UpdateLifeBar(currentLife, totalLife);
@@ -158,6 +160,7 @@ void AMyEnemyActor::TakeDamage(int damage)
 	{
 		DieAction();
 	}
+	
 }
 
 void AMyEnemyActor::DieAction()
@@ -165,12 +168,27 @@ void AMyEnemyActor::DieAction()
 	ATPUnrealGameState* myState = GetWorld()->GetGameState<ATPUnrealGameState>();
 	if (myState)
 	{
-		myState->SetScore(1);
+		myState->SetScore(10);
+		myState->AddDestroyedEnemy();
 	}
+	PlaySound(deathSound);
 	died = true;
 	currentLife = 0;
 	canMove = false;
 	canShoot = false;
 	canRotate = false;
 	animatorEnemy->DieNotify();
+}
+
+void AMyEnemyActor::PlaySound(USoundCue* sound)
+{
+	if (audioComp)
+	{
+		audioComp->Stop();
+		if (sound)
+		{
+			audioComp->SetSound(sound);
+			audioComp->Play();
+		}
+	}
 }

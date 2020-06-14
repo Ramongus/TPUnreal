@@ -24,6 +24,7 @@ public:
 
 	void UpdateLifeBar(float lifeAmount , float totalLifeAmount);
 	void UpdateScoreText(int value);
+	void UpdateMainText(FString text);
 	
 
 	virtual void DrawHUD();
@@ -31,5 +32,6 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 private:
+
 	UPlayersUserWidget* playersUserWidget;
 };

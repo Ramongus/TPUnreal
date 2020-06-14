@@ -93,7 +93,7 @@ public:
 	void CheckIdle();
 
 	UFUNCTION()
-		void TakeDamage(int damage);
+		void TakeDamage(int damage,int points);
 
 	UFUNCTION()
 		void Shoot();
@@ -103,6 +103,7 @@ public:
 
 	UFUNCTION()
 		void DestroyThisObject();
-
+	UFUNCTION()
+		void PlaySound(USoundCue* sound);
 	
 };

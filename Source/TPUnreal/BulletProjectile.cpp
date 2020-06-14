@@ -6,7 +6,7 @@
 // Sets default values
 ABulletProjectile::ABulletProjectile()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 }
 
@@ -33,23 +33,35 @@ void ABulletProjectile::DestroyThisBullet()
 	Destroy();
 }
 
-void ABulletProjectile::OverlapDemo(UPrimitiveComponent* primComp, AActor* overlapedActor, UPrimitiveComponent* otherOverlapedComponent, int32 overInt, bool overBool, const FHitResult& overHit){
+void ABulletProjectile::OverlapDemo(UPrimitiveComponent* primComp, AActor* overlapedActor, UPrimitiveComponent* otherOverlapedComponent, int32 overInt, bool overBool, const FHitResult& overHit) {
 
 
 	AMyPlayer* playerCollider = Cast<AMyPlayer>(overlapedActor);
 	AMyEnemyActor* enemyCollider = Cast<AMyEnemyActor>(overlapedActor);
+	int newScore = 1;
+		if (playerCollider != nullptr)
+		{
+			playerCollider->TakeDamage(damage);
+			//UE_LOG(LogTemp, Warning, TEXT("choco con player"));
+		}
 
-	if (playerCollider != nullptr)
-	{
-		playerCollider->TakeDamage(damage);
-		//UE_LOG(LogTemp, Warning, TEXT("choco con player"));
-	}
+		if (enemyCollider != nullptr)
+		{
+			if (otherOverlapedComponent->GetName() == "UpCollider")
+			{
+				newScore = 5;
+			}
+			else if (otherOverlapedComponent->GetName() == "MiddleCollider")
+			{
+				newScore = 3;
+			}
+			else if (otherOverlapedComponent->GetName() == "DownCollider")
+			{
+				newScore = 1;
+			}
+			enemyCollider->TakeDamage(damage,newScore);
+			//UE_LOG(LogTemp, Warning, TEXT("choco con enemigo"));
+		}
 
-	if (enemyCollider != nullptr)
-	{
-		enemyCollider->TakeDamage(damage);
-		//UE_LOG(LogTemp, Warning, TEXT("choco con enemigo"));
-	}
-	
-	DestroyThisBullet();
+		DestroyThisBullet();
 }

@@ -22,16 +22,41 @@ void AMyPlayer::BeginPlay()
 	currentLife = totalLife;
 	died = false;
 
-	//myHud = Cast<APlayersHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+	ATPUnrealGameModeBase* gameMode = GetWorld()->GetAuthGameMode<ATPUnrealGameModeBase>();
+	timesToDie = gameMode->playersLifes;
+	timeToRespawn = gameMode->timeToSpawnPlayer;
+	respawnTimer = 0;
 }
 
 // Called every frame
 void AMyPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	if (currentLife <= 0 && !died)
+	if (died)
 	{
-		DieAction();
+		if (timesToDie > 0)
+		{
+			ATPUnrealGameState* myGameState = GetWorld()->GetGameState<ATPUnrealGameState>();
+			myGameState->OnRoundDied();
+			respawnTimer += DeltaTime;
+			if (respawnTimer >= timeToRespawn)
+			{
+				auto player = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+					if (player != nullptr)
+					{
+						SetActorLocation(player->GetSpawnLocation());
+					}
+				currentLife = totalLife;
+				APlayersHUD* hud = Cast<APlayersHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
+				if (hud)	hud->UpdateLifeBar(currentLife, totalLife);
+				died = false;
+				respawnTimer = 0;
+			}
+		}
+		else
+		{
+
+		}
 	}
 }
 
@@ -39,7 +64,7 @@ void AMyPlayer::Tick(float DeltaTime)
 void AMyPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
+	
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMyPlayer::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMyPlayer::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &AMyPlayer::Turn);
@@ -50,34 +75,51 @@ void AMyPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AMyPlayer::MoveForward(float value) {
 
-	FVector forward = GetActorForwardVector().GetSafeNormal();
-	AddMovementInput(forward, speed * value);
+	if (!died)
+	{
+		FVector forward = GetActorForwardVector().GetSafeNormal();
+		AddMovementInput(forward, speed * value);
+	}
 }
 
 void AMyPlayer::MoveRight(float value) {
-
-	FVector right = GetActorRightVector().GetSafeNormal();
-	AddMovementInput(right, speed * value);
+	if (!died)
+	{
+		FVector right = GetActorRightVector().GetSafeNormal();
+		AddMovementInput(right, speed * value);
+	}
 }
 
 void AMyPlayer::Turn(float value) {
-
-	AddControllerYawInput(value * rotationSpeed);
+	if (!died)
+	{
+		AddControllerYawInput(value * rotationSpeed);
+	}
 }
 
 void AMyPlayer::LookUp(float value) {
 
-	AddControllerPitchInput(value * lookUpSpeed);
+	if (!died)
+	{
+		AddControllerPitchInput(value * lookUpSpeed);
+	}
 }
 
 void AMyPlayer::Shoot() {
 
-	GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, bulletSpawnPoint->GetComponentLocation(), GetControlRotation());
+	if (!died)
+	{
+		GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, bulletSpawnPoint->GetComponentLocation(), GetControlRotation());
+		weaponAnim->ChangeShootingValue();
+	}
 }
 
 void AMyPlayer::JumpAction()
 {
-	Jump();
+	if (!died)
+	{
+		Jump();
+	}
 }
 
 void AMyPlayer::TakeDamage(int damage)
@@ -86,12 +128,16 @@ void AMyPlayer::TakeDamage(int damage)
 	currentLife -= damage;
 
 	APlayersHUD* hud = Cast<APlayersHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
-	if (hud)	hud->UpdateLifeBar(currentLife , totalLife);
+	if (hud)	hud->UpdateLifeBar(currentLife, totalLife);
 	else UE_LOG(LogTemp, Warning, TEXT("no hay hud"));
+
+	if (currentLife <= 0 && !died)
+	{
+		DieAction();
+	}
 }
 
 void AMyPlayer::DieAction()
 {
 	died = true;
-	GetWorld()->SeamlessTravel("DemoLevel");
 }

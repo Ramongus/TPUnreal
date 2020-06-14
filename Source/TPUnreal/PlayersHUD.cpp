@@ -18,6 +18,7 @@ void APlayersHUD::BeginPlay()
 		if (playersUserWidget)
 		{
 			playersUserWidget->AddToViewport();
+			playersUserWidget->UpdateMainText("");
 		}
 	}
 }
@@ -45,5 +46,13 @@ void APlayersHUD::UpdateScoreText(int value)
 	if (playersUserWidget)
 	{
 		playersUserWidget->UpdateScoreText(value);
+	}
+}
+
+void APlayersHUD::UpdateMainText(FString text)
+{
+	if (playersUserWidget)
+	{
+		playersUserWidget->UpdateMainText(text);
 	}
 }

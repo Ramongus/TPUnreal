@@ -18,7 +18,14 @@ UEnemyGenerator::UEnemyGenerator()
 void UEnemyGenerator::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	ATPUnrealGameModeBase* gameMode = GetWorld()->GetAuthGameMode<ATPUnrealGameModeBase>();
+	if (gameMode)
+	{
+		gameMode->enemiesDestroyed = gameMode->enemiesToSpawn;
+		enemiesToSpawn = gameMode->enemiesToSpawn;
+		timeToSpawnEnemies = gameMode->timeToSpawnEnemy;
+	}
 
 	TArray<AActor*> spawnActors;
 	UGameplayStatics::GetAllActorsOfClass(this, ASpawnPoint::StaticClass(), spawnActors);
@@ -26,7 +33,6 @@ void UEnemyGenerator::BeginPlay()
 	if (spawnActors[0] != nullptr)
 	{
 		spawnPoints = spawnActors;
-		SpawnPlayers();
 	}
 	
 
@@ -40,15 +46,23 @@ void UEnemyGenerator::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	if (enemiesToSpawn > 0) spawnTimer += DeltaTime;
+	if (spawnTimer >= timeToSpawnEnemies)
+	{
+		enemiesToSpawn--;
+		if (spawnPoints[0] != nullptr)
+		{
+			SpawnPlayers();
+		}
+		
+		spawnTimer = 0;
+	}
+
 	// ...
 }
 
 void UEnemyGenerator::SpawnPlayers()
 {
-	for (int i = 0; i < enemiesToSpawn; i++)
-	{
-		GetWorld()->SpawnActor<AMyEnemyActor>(EnemyPrefab, spawnPoints[FMath::RandRange(0, spawnPoints.Num())]->GetActorLocation(), spawnPoints[0]->GetActorRotation());
-
-	}
+	GetWorld()->SpawnActor<AMyEnemyActor>(EnemyPrefab, spawnPoints[FMath::RandRange(0, 4)]->GetActorLocation(), spawnPoints[0]->GetActorRotation());
 }
 

@@ -7,6 +7,8 @@
 #include "Engine/World.h"
 #include "GameFramework/Character.h"
 #include "BulletProjectile.h"
+#include "TPUnrealGameState.h"
+#include "WeaponAnimInstance.h"
 #include "GameFramework/Actor.h"
 #include "Components/SceneComponent.h"
 #include "MyPlayer.generated.h"
@@ -40,7 +42,12 @@ public:
 
 	USceneComponent* bulletSpawnPoint;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UWeaponAnimInstance* weaponAnim;
+
+	int timesToDie;
+	int timeToRespawn;
+	float respawnTimer;
 
 protected:
 	// Called when the game starts or when spawned
