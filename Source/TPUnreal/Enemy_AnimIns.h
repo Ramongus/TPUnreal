@@ -35,7 +35,7 @@ public:
 		void ShootNotify(bool value);
 
 	UFUNCTION(BlueprintCallable)
-		void DieNotify();
+		void DieNotify(bool value);
 	UFUNCTION(BlueprintCallable)
 		void HitNotify(bool value);
 };

@@ -48,6 +48,8 @@ public:
 	int timesToDie;
 	int timeToRespawn;
 	float respawnTimer;
+	bool hastoRestart;
+	int timer;
 
 protected:
 	// Called when the game starts or when spawned
@@ -70,4 +72,6 @@ public:
 		void TakeDamage(int damage);
 	UFUNCTION()
 		void DieAction();
+	UFUNCTION()
+		void RestartGame();
 };

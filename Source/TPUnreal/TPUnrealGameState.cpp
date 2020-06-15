@@ -18,8 +18,6 @@ void ATPUnrealGameState::OnRoundFinished()
 	 if (hud)	hud->UpdateMainText("YOU WON! FINAL SCORE: " + FString::FromInt(score));
 }
 
-
-
 void ATPUnrealGameState::AddDestroyedEnemy()
 {
 	currentEnemiesDestroyed++;
@@ -33,7 +31,7 @@ void ATPUnrealGameState::AddDestroyedEnemy()
 void ATPUnrealGameState::OnRoundLost()
 {
 	APlayersHUD* hud = Cast<APlayersHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
-	if (hud)	hud->UpdateMainText("YOU LOST! FINAL SCORE: " + FString::FromInt(score));
+	if (hud)	hud->UpdateMainText("YOU LOST! FINAL SCORE: " + FString::FromInt(score) + "\n PRESS R TO RESTART");
 }
 
 void ATPUnrealGameState::OnRoundDied()

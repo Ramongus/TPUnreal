@@ -32,6 +32,7 @@ void AMyPlayer::BeginPlay()
 void AMyPlayer::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (hastoRestart) return;
 	if (died)
 	{
 		if (timesToDie > 0)
@@ -42,35 +43,40 @@ void AMyPlayer::Tick(float DeltaTime)
 			if (respawnTimer >= timeToRespawn)
 			{
 				auto player = UGameplayStatics::GetPlayerController(GetWorld(), 0);
-					if (player != nullptr)
-					{
-						SetActorLocation(player->GetSpawnLocation());
-					}
+				if (player != nullptr)
+				{
+					SetActorLocation(player->GetSpawnLocation());
+				}
 				currentLife = totalLife;
 				APlayersHUD* hud = Cast<APlayersHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
 				if (hud)	hud->UpdateLifeBar(currentLife, totalLife);
 				died = false;
 				respawnTimer = 0;
+				timesToDie--;
 			}
 		}
 		else
 		{
-
+			ATPUnrealGameState* myGameState = GetWorld()->GetGameState<ATPUnrealGameState>();
+			myGameState->OnRoundLost();
+			hastoRestart = true;
 		}
 	}
+	
 }
 
 // Called to bind functionality to input
 void AMyPlayer::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	
+
 	PlayerInputComponent->BindAxis("MoveForward", this, &AMyPlayer::MoveForward);
 	PlayerInputComponent->BindAxis("MoveRight", this, &AMyPlayer::MoveRight);
 	PlayerInputComponent->BindAxis("Turn", this, &AMyPlayer::Turn);
 	PlayerInputComponent->BindAxis("LookUp", this, &AMyPlayer::LookUp);
 	PlayerInputComponent->BindAction("Shoot", IE_Pressed, this, &AMyPlayer::Shoot);
 	PlayerInputComponent->BindAction("Jump", IE_Pressed, this, &AMyPlayer::JumpAction);
+	PlayerInputComponent->BindAction("Restart", IE_Pressed, this, &AMyPlayer::RestartGame);
 }
 
 void AMyPlayer::MoveForward(float value) {
@@ -140,4 +146,12 @@ void AMyPlayer::TakeDamage(int damage)
 void AMyPlayer::DieAction()
 {
 	died = true;
+}
+
+void AMyPlayer::RestartGame()
+{
+	if (hastoRestart)
+	{
+		UGameplayStatics::OpenLevel(this, FName(*UGameplayStatics::GetCurrentLevelName(GetWorld())));
+	}
 }

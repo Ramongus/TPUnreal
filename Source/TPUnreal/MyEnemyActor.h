@@ -8,6 +8,7 @@
 #include "Enemy_AnimIns.h"
 #include "CoreMinimal.h"
 #include "MyPlayer.h"
+#include "SpawnPoint.h"
 #include "TPUnrealGameState.h"
 #include "Components/WidgetComponent.h"
 #include "EnemyUserWidget.h"
@@ -50,6 +51,8 @@ public:
 	UPROPERTY(EditAnywhere)
 		float totalLife;
 
+	UPROPERTY(EditAnywhere)
+		int lifes;
 	UPROPERTY(EditAnywhere,BlueprintReadWrite)
 		UEnemyUserWidget* myUserWidget;
 

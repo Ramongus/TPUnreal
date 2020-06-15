@@ -31,11 +31,14 @@ public:
 	UPROPERTY(meta = (BindWidget))
 		UTextBlock* mainText;
 
-	UPROPERTY(meta = (BingWidgetAnim))
+
+
+	UPROPERTY(meta = (BindWidgetAnim))
 		UWidgetAnimation* FadeOutAnim;
 
 
 	void UpdateLifeBar(float lifeAmount,float totalLife);
 	void UpdateScoreText(int value);
 	void UpdateMainText(FString text);
+	void UpdateTimerText(FString text);
 };

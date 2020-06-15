@@ -65,7 +65,37 @@ void AMyEnemyActor::Tick(float DeltaTime)
 		timeToDie -= DeltaTime;
 		if (timeToDie <= 0)
 		{
-			DestroyThisObject();
+			if (lifes > 1)
+			{
+				TArray<AActor*> spawnActors;
+				UGameplayStatics::GetAllActorsOfClass(this, ASpawnPoint::StaticClass(), spawnActors);
+
+				if (spawnActors[0] != nullptr)
+				{
+					SetActorLocation(spawnActors[FMath::RandRange(0, 4)]->GetActorLocation());
+				}
+				lifes--;
+				timeToDie = 3;
+				currentLife = totalLife;
+				died = false;
+				canMove = true;
+				canShoot = true;
+				canRotate = true;
+				if (myUserWidget)
+				{
+					myUserWidget->UpdateLifeBar(currentLife, totalLife);
+				}
+				animatorEnemy->DieNotify(false);
+			}
+			else
+			{
+				ATPUnrealGameState* myState = GetWorld()->GetGameState<ATPUnrealGameState>();
+				if (myState)
+				{
+					myState->AddDestroyedEnemy();
+				}
+				DestroyThisObject();
+			}
 		}
 		return;
 	}
@@ -169,7 +199,6 @@ void AMyEnemyActor::DieAction()
 	if (myState)
 	{
 		myState->SetScore(10);
-		myState->AddDestroyedEnemy();
 	}
 	PlaySound(deathSound);
 	died = true;
@@ -177,7 +206,7 @@ void AMyEnemyActor::DieAction()
 	canMove = false;
 	canShoot = false;
 	canRotate = false;
-	animatorEnemy->DieNotify();
+	animatorEnemy->DieNotify(true);
 }
 
 void AMyEnemyActor::PlaySound(USoundCue* sound)

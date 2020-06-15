@@ -13,9 +13,9 @@ void UEnemy_AnimIns::ShootNotify(bool value)
 	isShooting = value;
 }
 
-void UEnemy_AnimIns::DieNotify()
+void UEnemy_AnimIns::DieNotify(bool value)
 {
-	died = true;
+	died = value;
 }
 
 void UEnemy_AnimIns::HitNotify(bool value)

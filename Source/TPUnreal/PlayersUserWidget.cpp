@@ -19,14 +19,7 @@ void UPlayersUserWidget::UpdateLifeBar(float lifeAmount,float totalLife)
 	{
 		lifeBar->SetPercent(lifeAmount/totalLife);
 	}
-	if (FadeOutAnim)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("fadeanimaaa"));
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("no hay fadeanimaaa"));
-	}
+	
 	if (FadeOutAnim && lifeAmount<=0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("fadeanim"));
@@ -35,14 +28,20 @@ void UPlayersUserWidget::UpdateLifeBar(float lifeAmount,float totalLife)
 	if (FadeOutAnim && lifeAmount == totalLife)
 	{
 		PlayAnimation(FadeOutAnim, 1.0f, 1, EUMGSequencePlayMode::Reverse, 1);
+		UpdateMainText("");
 	}
 }
+
 
 void UPlayersUserWidget::UpdateScoreText(int value)
 {
 	if (pointsText)
 	{
 		pointsText->SetText(FText::FromString("POINTS: " + FString::FromInt(value)));
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("no hay score"));
 	}
 }
 

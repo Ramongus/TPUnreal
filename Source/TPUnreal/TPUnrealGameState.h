@@ -18,7 +18,7 @@ class TPUNREAL_API ATPUnrealGameState : public AGameStateBase
 	GENERATED_BODY()
 
 protected:
-
+	
 	int score = 0;
 	int currentRound = 1;
 	int currentEnemiesDestroyed;
