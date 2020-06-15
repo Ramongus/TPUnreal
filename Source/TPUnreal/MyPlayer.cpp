@@ -115,7 +115,7 @@ void AMyPlayer::Shoot() {
 
 	if (!died)
 	{
-		GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, bulletSpawnPoint->GetComponentLocation(), GetControlRotation());
+		GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, bulletSpawnPoint->GetComponentLocation(), bulletSpawnPoint->GetComponentRotation());
 		weaponAnim->ChangeShootingValue();
 	}
 }
