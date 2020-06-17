@@ -45,6 +45,16 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UWeaponAnimInstance* weaponAnim;
 
+	UPROPERTY()
+		UAudioComponent* audioComp;
+
+	UPROPERTY(EditAnywhere)
+		USoundCue* hitSound;
+
+	UPROPERTY(EditAnywhere)
+		USoundCue* deathSound;
+	
+
 	int timesToDie;
 	int timeToRespawn;
 	float respawnTimer;
@@ -74,4 +84,6 @@ public:
 		void DieAction();
 	UFUNCTION()
 		void RestartGame();
+	UFUNCTION()
+		void PlaySound(USoundCue* sound);
 };

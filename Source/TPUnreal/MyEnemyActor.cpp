@@ -161,9 +161,15 @@ void AMyEnemyActor::Shoot()
 
 		if (bulletPrefab && canMove == false)
 		{
+
+			FRotator shootRotation = UKismetMathLibrary::FindLookAtRotation(GetActorLocation(), theplayer->GetActorLocation());
+
+		
+
+
 			PlaySound(shootSound);
 			FVector spawnPos = FVector(GetActorLocation().X, GetActorLocation().Y, GetActorLocation().Z + 70);
-			GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, spawnPos + (GetActorForwardVector() * 90), GetActorRotation());
+			GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, spawnPos + (GetActorForwardVector() * 90), shootRotation);
 		}
 		animatorEnemy->ShootNotify(true);
 	}

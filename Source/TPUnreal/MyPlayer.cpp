@@ -26,6 +26,7 @@ void AMyPlayer::BeginPlay()
 	timesToDie = gameMode->playersLifes;
 	timeToRespawn = gameMode->timeToSpawnPlayer;
 	respawnTimer = 0;
+	audioComp = FindComponentByClass<UAudioComponent>();
 }
 
 // Called every frame
@@ -132,7 +133,7 @@ void AMyPlayer::TakeDamage(int damage)
 {
 	if (died) return;
 	currentLife -= damage;
-
+	PlaySound(hitSound);
 	APlayersHUD* hud = Cast<APlayersHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
 	if (hud)	hud->UpdateLifeBar(currentLife, totalLife);
 	else UE_LOG(LogTemp, Warning, TEXT("no hay hud"));
@@ -146,6 +147,7 @@ void AMyPlayer::TakeDamage(int damage)
 void AMyPlayer::DieAction()
 {
 	died = true;
+	PlaySound(deathSound);
 }
 
 void AMyPlayer::RestartGame()
@@ -153,5 +155,18 @@ void AMyPlayer::RestartGame()
 	if (hastoRestart)
 	{
 		UGameplayStatics::OpenLevel(this, FName(*UGameplayStatics::GetCurrentLevelName(GetWorld())));
+	}
+}
+
+void AMyPlayer::PlaySound(USoundCue* sound)
+{
+	if (audioComp)
+	{
+		audioComp->Stop();
+		if (sound)
+		{
+			audioComp->SetSound(sound);
+			audioComp->Play();
+		}
 	}
 }
