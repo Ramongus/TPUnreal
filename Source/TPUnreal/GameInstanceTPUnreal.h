@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "TPUnrealGameModeBase.h"
+#include "Engine//World.h"
 #include "Engine/GameInstance.h"
 #include "GameInstanceTPUnreal.generated.h"
 
@@ -16,8 +18,12 @@ class TPUNREAL_API UGameInstanceTPUnreal : public UGameInstance
 
 public:
 
+	UPROPERTY(BlueprintReadWrite)
 	int currentTime;
+	UPROPERTY(BlueprintReadWrite)
 	int playersLifes;
+	UPROPERTY(BlueprintReadWrite)
+	int points;
 
 	virtual void Init() override;
 	

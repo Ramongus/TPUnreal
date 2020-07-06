@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "TPUnrealGameModeBase.h"
 #include "Engine/World.h"
+#include "GameInstanceTPUnreal.h"
 #include "PlayersHUD.h"
 #include "GameFramework/GameStateBase.h"
 #include "TPUnrealGameState.generated.h"

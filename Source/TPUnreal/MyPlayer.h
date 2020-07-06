@@ -8,6 +8,7 @@
 #include "GameFramework/Character.h"
 #include "BulletProjectile.h"
 #include "TPUnrealGameState.h"
+#include "GameInstanceTPUnreal.h"
 #include "WeaponAnimInstance.h"
 #include "GameFramework/Actor.h"
 #include "Components/SceneComponent.h"
@@ -54,6 +55,7 @@ public:
 	UPROPERTY(EditAnywhere)
 		USoundCue* deathSound;
 	
+	UGameInstanceTPUnreal* myGI;
 
 	int timesToDie;
 	int timeToRespawn;
@@ -86,4 +88,7 @@ public:
 		void RestartGame();
 	UFUNCTION()
 		void PlaySound(USoundCue* sound);
+
+	UFUNCTION()
+		void UpdateTimer();
 };

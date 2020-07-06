@@ -23,10 +23,20 @@ void AMyPlayer::BeginPlay()
 	died = false;
 
 	ATPUnrealGameModeBase* gameMode = GetWorld()->GetAuthGameMode<ATPUnrealGameModeBase>();
-	timesToDie = gameMode->playersLifes;
+	//timesToDie = gameMode->playersLifes;
 	timeToRespawn = gameMode->timeToSpawnPlayer;
 	respawnTimer = 0;
 	audioComp = FindComponentByClass<UAudioComponent>();
+
+	myGI = Cast<UGameInstanceTPUnreal>(GetGameInstance());
+	if (myGI)
+	{
+		ATPUnrealGameState* myGameState = GetWorld()->GetGameState<ATPUnrealGameState>();
+		myGameState->SetScore(myGI->points);
+		gameMode->myTimer = myGI->currentTime;
+		timesToDie = myGI->playersLifes;
+	}
+	
 }
 
 // Called every frame
@@ -36,11 +46,13 @@ void AMyPlayer::Tick(float DeltaTime)
 	if (hastoRestart) return;
 	if (died)
 	{
-		if (timesToDie > 0)
+		ATPUnrealGameModeBase* gameMode = GetWorld()->GetAuthGameMode<ATPUnrealGameModeBase>();
+		if (timesToDie < gameMode->playersLifes)
 		{
 			ATPUnrealGameState* myGameState = GetWorld()->GetGameState<ATPUnrealGameState>();
 			myGameState->OnRoundDied();
 			respawnTimer += DeltaTime;
+
 			if (respawnTimer >= timeToRespawn)
 			{
 				auto player = UGameplayStatics::GetPlayerController(GetWorld(), 0);
@@ -53,7 +65,8 @@ void AMyPlayer::Tick(float DeltaTime)
 				if (hud)	hud->UpdateLifeBar(currentLife, totalLife);
 				died = false;
 				respawnTimer = 0;
-				timesToDie--;
+				timesToDie++;
+				myGI->playersLifes = timesToDie;
 			}
 		}
 		else
@@ -63,6 +76,8 @@ void AMyPlayer::Tick(float DeltaTime)
 			hastoRestart = true;
 		}
 	}
+
+	UpdateTimer();
 	
 }
 
@@ -154,7 +169,10 @@ void AMyPlayer::RestartGame()
 {
 	if (hastoRestart)
 	{
-		UGameplayStatics::OpenLevel(this, FName(*UGameplayStatics::GetCurrentLevelName(GetWorld())));
+		myGI->currentTime = 0;
+		myGI->playersLifes = 0;
+		myGI->points = 0;
+		UGameplayStatics::OpenLevel(this, FName("DemoLevel"));
 	}
 }
 
@@ -168,5 +186,14 @@ void AMyPlayer::PlaySound(USoundCue* sound)
 			audioComp->SetSound(sound);
 			audioComp->Play();
 		}
+	}
+}
+
+void AMyPlayer::UpdateTimer()
+{
+	ATPUnrealGameModeBase* gameMode = GetWorld()->GetAuthGameMode<ATPUnrealGameModeBase>();
+	if (gameMode)
+	{
+		myGI->currentTime = gameMode->myTimer;
 	}
 }

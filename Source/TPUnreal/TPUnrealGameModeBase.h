@@ -30,6 +30,11 @@ public:
 	int enemiesDestroyed = 2;
 	float timerToSpawn = 0;
 
+	UPROPERTY(BlueprintReadWrite)
+	int myTimer;
+	UPROPERTY(BlueprintReadWrite)
+	int myBeginTimer;
+
 public:
 	
 	UFUNCTION(BlueprintCallable)
