@@ -19,6 +19,7 @@ void UEnemyGenerator::BeginPlay()
 {
 	Super::BeginPlay();
 
+	levelName = GetWorld()->GetFirstPlayerController()->GetLevel()->GetOuter()->GetName();
 	ATPUnrealGameModeBase* gameMode = GetWorld()->GetAuthGameMode<ATPUnrealGameModeBase>();
 	if (gameMode)
 	{
@@ -50,7 +51,7 @@ void UEnemyGenerator::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	if (spawnTimer >= timeToSpawnEnemies)
 	{
 		enemiesToSpawn--;
-		if (spawnPoints[0] != nullptr)
+		if (spawnPoints[0] != nullptr && levelName!="MainMenu")
 		{
 			SpawnPlayers();
 		}

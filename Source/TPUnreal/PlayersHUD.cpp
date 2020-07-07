@@ -11,7 +11,14 @@ APlayersHUD::APlayersHUD()
 void APlayersHUD::BeginPlay()
 {
 	Super::BeginPlay();
-	if (usetWidgetClass)
+
+	FString levelname = GetWorld()->GetFirstPlayerController()->GetLevel()->GetOuter()->GetName();
+	
+	if (levelname == "MainMenu")
+	{
+		UE_LOG(LogTemp, Warning, TEXT("esta el menu"));
+	}
+	else if (usetWidgetClass)
 	{
 		playersUserWidget = CreateWidget<UPlayersUserWidget>(GetWorld(), usetWidgetClass);
 

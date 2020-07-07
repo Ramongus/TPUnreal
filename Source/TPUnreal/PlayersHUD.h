@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/HUD.h"
 #include "Components/WidgetComponent.h"
+#include "Engine/World.h"
 #include "PlayersUserWidget.h"
 #include "PlayersHUD.generated.h"
 

@@ -23,6 +23,7 @@ public:
 	int enemiesToSpawn = 2;
 	int timeToSpawnEnemies = 5;
 	float spawnTimer;
+	FString levelName;
 	UPROPERTY(EditAnywhere)
 	TArray<AActor*> spawnPoints;
 

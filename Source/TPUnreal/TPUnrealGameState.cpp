@@ -22,7 +22,6 @@ void ATPUnrealGameState::OnRoundFinished()
 {
 	 UE_LOG(LogTemp, Warning, TEXT("termino el round"));
 	 APlayersHUD* hud = Cast<APlayersHUD>(GetWorld()->GetFirstPlayerController()->GetHUD());
-	 GetWorld()->GetCurrentLevel()->GetName();
 	 FString levelname = GetWorld()->GetFirstPlayerController()->GetLevel()->GetOuter()->GetName();
 	// if (hud)	hud->UpdateMainText(levelname + "LEVEL FINISHED! SCORE: " + FString::FromInt(score));
 	 if (levelname == "DemoLevel")
