@@ -10,13 +10,14 @@ AMyPlayer::AMyPlayer()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
 }
 
 // Called when the game starts or when spawned
 void AMyPlayer::BeginPlay()
 {
 	Super::BeginPlay();
+
+	burst = false;
 
 	bulletSpawnPoint = Cast<USceneComponent>(refToSpawnBulletPoint.GetComponent(this));
 	currentLife = totalLife;
@@ -131,8 +132,10 @@ void AMyPlayer::Shoot() {
 
 	if (!died)
 	{
-		GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, bulletSpawnPoint->GetComponentLocation(), bulletSpawnPoint->GetComponentRotation());
-		weaponAnim->ChangeShootingValue();
+		if (!burst) {
+			UE_LOG(LogTemp, Warning, TEXT("NoBurst"));
+			CreateBullet();
+		}
 	}
 }
 
@@ -195,5 +198,27 @@ void AMyPlayer::UpdateTimer()
 	if (gameMode)
 	{
 		myGI->currentTime = gameMode->myTimer;
+	}
+}
+
+void AMyPlayer::FireBurst()
+{
+	burst = true;
+	GetWorld()->GetTimerManager().SetTimer(myTimer, this, &AMyPlayer::UnActiveBurst, timeBurst, false, timeBurst);
+	CreateBullet();
+}
+
+void AMyPlayer::UnActiveBurst()
+{
+	burst = false;
+}
+
+void AMyPlayer::CreateBullet()
+{
+	GetWorld()->SpawnActor<ABulletProjectile>(bulletPrefab, bulletSpawnPoint->GetComponentLocation(), bulletSpawnPoint->GetComponentRotation());
+	weaponAnim->ChangeShootingValue();
+	if (burst) {
+		UE_LOG(LogTemp, Warning, TEXT("InBurst"));
+		GetWorld()->GetTimerManager().SetTimer(otherTimer, this, &AMyPlayer::CreateBullet, fireRateInBurst, false, fireRateInBurst);
 	}
 }

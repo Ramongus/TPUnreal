@@ -54,8 +54,18 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		USoundCue* deathSound;
+
+	UPROPERTY(EditAnywhere)
+		float timeBurst;
+
+	UPROPERTY(EditAnywhere)
+		float fireRateInBurst;
+
+	bool burst;
 	
 	UGameInstanceTPUnreal* myGI;
+	FTimerHandle myTimer;
+	FTimerHandle otherTimer;
 
 	int timesToDie;
 	int timeToRespawn;
@@ -91,4 +101,13 @@ public:
 
 	UFUNCTION()
 		void UpdateTimer();
+
+	UFUNCTION()
+		void FireBurst();
+
+	UFUNCTION()
+		void UnActiveBurst();
+
+	UFUNCTION()
+		void CreateBullet();
 };
