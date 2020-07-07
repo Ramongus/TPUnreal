@@ -35,6 +35,8 @@ void APowerUp::OverlapDemo(UPrimitiveComponent* primComp, AActor* overlapedActor
 	if (playerCollider != nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("POWER UP"));
+		playerCollider->FireBurst();
+		Destroy();
 	}
 }
 
