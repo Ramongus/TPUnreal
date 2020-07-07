@@ -30,6 +30,7 @@ void UMainMenuUserWidget::PlayConfig()
 
 void UMainMenuUserWidget::QuitConfig()
 {
+	FGenericPlatformMisc::RequestExit(false);
 	UE_LOG(LogTemp, Warning, TEXT("salir del juego"));
 }
 
