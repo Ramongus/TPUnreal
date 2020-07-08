@@ -207,6 +207,7 @@ void AMyPlayer::UpdateTimer()
 
 void AMyPlayer::FireBurst()
 {
+	PlaySound(powerUpSound);
 	burst = true;
 	GetWorld()->GetTimerManager().SetTimer(myTimer, this, &AMyPlayer::UnActiveBurst, timeBurst, false, timeBurst);
 	CreateBullet();
@@ -214,7 +215,6 @@ void AMyPlayer::FireBurst()
 
 void AMyPlayer::UnActiveBurst()
 {
-	PlaySound(powerUpSound);
 	burst = false;
 }
 
