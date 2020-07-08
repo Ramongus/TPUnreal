@@ -20,7 +20,7 @@ public:
 	ASlowDebuff();
 
 	UPROPERTY(EditAnywhere)
-		FComponentReference reference = "Col";
+		FComponentReference reference;
 
 	UPROPERTY()
 		USphereComponent* sphereCol;

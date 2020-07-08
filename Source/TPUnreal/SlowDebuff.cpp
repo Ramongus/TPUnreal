@@ -18,7 +18,7 @@ void ASlowDebuff::BeginPlay()
 	
 	sphereCol = Cast<USphereComponent>(reference.GetComponent(this));
 
-	sphereCol->OnComponentBeginOverlap.AddDynamic(this, &APowerUp::OverlapDemo);
+	sphereCol->OnComponentBeginOverlap.AddDynamic(this, &ASlowDebuff::OverlapDemo);
 }
 
 // Called every frame
