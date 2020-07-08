@@ -37,7 +37,7 @@ void AMyPlayer::BeginPlay()
 		gameMode->myTimer = myGI->currentTime;
 		timesToDie = myGI->playersLifes;
 	}
-	
+	slowed = false;
 }
 
 // Called every frame
@@ -100,8 +100,11 @@ void AMyPlayer::MoveForward(float value) {
 
 	if (!died)
 	{
+		
 		FVector forward = GetActorForwardVector().GetSafeNormal();
-		AddMovementInput(forward, speed * value);
+		if(!slowed) AddMovementInput(forward, speed * value);
+		else AddMovementInput(forward * slowMultiplier, speed * value);
+		
 	}
 }
 
@@ -109,7 +112,8 @@ void AMyPlayer::MoveRight(float value) {
 	if (!died)
 	{
 		FVector right = GetActorRightVector().GetSafeNormal();
-		AddMovementInput(right, speed * value);
+		if (!slowed) AddMovementInput(right, speed * value);
+		else AddMovementInput(right * slowMultiplier, speed * value);
 	}
 }
 
@@ -210,6 +214,7 @@ void AMyPlayer::FireBurst()
 
 void AMyPlayer::UnActiveBurst()
 {
+	PlaySound(powerUpSound);
 	burst = false;
 }
 
@@ -225,11 +230,15 @@ void AMyPlayer::CreateBullet()
 
 void AMyPlayer::Slow()
 {
-	speed = speed * slowMultiplier;
+
+	PlaySound(debufSound);
+	slowed = true;
+	
+	UE_LOG(LogTemp, Warning, TEXT("Se mueve lento, speed = %i"),speed);
 	GetWorld()->GetTimerManager().SetTimer(slowTimer, this, &AMyPlayer::NormalSpeed, timeSlowed, false, timeSlowed);
 }
 
 void AMyPlayer::NormalSpeed()
 {
-	speed = speed / slowMultiplier;
+	slowed = false;
 }

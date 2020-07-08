@@ -24,7 +24,7 @@ public:
 	AMyPlayer();
 
 	UPROPERTY(EditDefaultsOnly)
-		float speed = 10.0f;
+		float speed = 1.0f;
 	UPROPERTY(EditDefaultsOnly)
 		float rotationSpeed = 2.0f;
 	UPROPERTY(EditDefaultsOnly)
@@ -56,6 +56,12 @@ public:
 		USoundCue* deathSound;
 
 	UPROPERTY(EditAnywhere)
+		USoundCue* powerUpSound;
+
+	UPROPERTY(EditAnywhere)
+		USoundCue* debufSound;
+
+	UPROPERTY(EditAnywhere)
 		float timeBurst;
 
 	UPROPERTY(EditAnywhere)
@@ -77,6 +83,7 @@ public:
 	float respawnTimer;
 	bool hastoRestart;
 	int timer;
+	bool slowed;
 
 protected:
 	// Called when the game starts or when spawned
