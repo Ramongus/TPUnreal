@@ -60,12 +60,17 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		float fireRateInBurst;
+	UPROPERTY(EditAnywhere)
+		float timeSlowed = 3.0f;
+	UPROPERTY(EditAnywhere)
+		float slowMultiplier = 0.5f;
 
 	bool burst;
 	
 	UGameInstanceTPUnreal* myGI;
 	FTimerHandle myTimer;
 	FTimerHandle otherTimer;
+	FTimerHandle slowTimer;
 
 	int timesToDie;
 	int timeToRespawn;
@@ -110,4 +115,10 @@ public:
 
 	UFUNCTION()
 		void CreateBullet();
+
+	UFUNCTION()
+		void Slow();
+
+	UFUNCTION()
+		void NormalSpeed();
 };

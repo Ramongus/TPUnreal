@@ -222,3 +222,14 @@ void AMyPlayer::CreateBullet()
 		GetWorld()->GetTimerManager().SetTimer(otherTimer, this, &AMyPlayer::CreateBullet, fireRateInBurst, false, fireRateInBurst);
 	}
 }
+
+void AMyPlayer::Slow()
+{
+	speed = speed * slowMultiplier;
+	GetWorld()->GetTimerManager().SetTimer(slowTimer, this, &AMyPlayer::NormalSpeed, timeSlowed, false, timeSlowed);
+}
+
+void AMyPlayer::NormalSpeed()
+{
+	speed = speed / slowMultiplier;
+}
